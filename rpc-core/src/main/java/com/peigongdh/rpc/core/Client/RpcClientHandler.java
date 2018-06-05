@@ -1,6 +1,7 @@
 package com.peigongdh.rpc.core.Client;
 
 import com.peigongdh.rpc.core.protocol.Response;
+import com.peigongdh.rpc.core.utils.ResponseMapHelper;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /*因为要在不同channel中共享使用responseMap的blockingQueue，所以要加此注解*/
 
@@ -17,10 +20,11 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<Response> {
 
     //因为此处这个要公用，故拿出来单独放到一个类中来调用
     // public static ConcurrentMap<Long, BlockingQueue<Response>> responseMap = new ConcurrentHashMap<Long, BlockingQueue<Response>>();
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Response msg) throws Exception {
         //此处的业务逻辑就是拿到对应id，讲返回信息放入相应blockingQueue中
-        BlockingQueue<Response> blockingQueue = responseMap.get(msg.getRequestId());
+        BlockingQueue<Response> blockingQueue = ResponseMapHelper.responseMap.get(msg.getRequestId());
         if (blockingQueue != null) {
             blockingQueue.put(msg);
         }
