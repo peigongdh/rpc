@@ -1,4 +1,4 @@
-package com.peigongdh.rpc.core.Client;
+package com.peigongdh.rpc.core.client;
 
 import com.peigongdh.rpc.core.utils.ConnectionObjectFactory;
 import io.netty.channel.Channel;

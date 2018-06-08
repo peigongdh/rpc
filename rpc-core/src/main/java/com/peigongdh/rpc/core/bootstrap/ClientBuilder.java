@@ -1,7 +1,7 @@
 package com.peigongdh.rpc.core.bootstrap;
 
 import com.google.common.base.Preconditions;
-import com.peigongdh.rpc.core.Client.ClientImpl;
+import com.peigongdh.rpc.core.client.ClientImpl;
 import com.peigongdh.rpc.core.rpcproxy.CglibRpcProxy;
 import com.peigongdh.rpc.core.rpcproxy.RpcProxy;
 

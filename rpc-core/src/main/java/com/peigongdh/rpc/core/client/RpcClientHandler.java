@@ -1,4 +1,4 @@
-package com.peigongdh.rpc.core.Client;
+package com.peigongdh.rpc.core.client;
 
 import com.peigongdh.rpc.core.protocol.Response;
 import com.peigongdh.rpc.core.utils.ResponseMapHelper;
@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /*因为要在不同channel中共享使用responseMap的blockingQueue，所以要加此注解*/
 

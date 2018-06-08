@@ -1,6 +1,6 @@
 package com.peigongdh.rpc.core.rpcproxy;
 
-import com.peigongdh.rpc.core.Client.Client;
+import com.peigongdh.rpc.core.client.Client;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
