@@ -16,12 +16,12 @@ import java.util.concurrent.BlockingQueue;
 public class RpcClientHandler extends SimpleChannelInboundHandler<Response> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcClientHandler.class);
 
-    //因为此处这个要公用，故拿出来单独放到一个类中来调用
+    // 因为此处这个要公用，故拿出来单独放到一个类中来调用
     // public static ConcurrentMap<Long, BlockingQueue<Response>> responseMap = new ConcurrentHashMap<Long, BlockingQueue<Response>>();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Response msg) throws Exception {
-        //此处的业务逻辑就是拿到对应id，讲返回信息放入相应blockingQueue中
+        // 此处的业务逻辑就是拿到对应id，将返回信息放入相应blockingQueue中
         BlockingQueue<Response> blockingQueue = ResponseMapHelper.responseMap.get(msg.getRequestId());
         if (blockingQueue != null) {
             blockingQueue.put(msg);

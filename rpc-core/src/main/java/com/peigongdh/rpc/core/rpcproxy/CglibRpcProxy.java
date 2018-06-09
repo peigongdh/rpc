@@ -12,7 +12,7 @@ public class CglibRpcProxy implements RpcProxy {
     public <T> T proxyInterface(Client client, Class<T> serviceInterface) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(serviceInterface);
-        enhancer.setCallback(new CglibInteceptor(client, serviceInterface));
+        enhancer.setCallback(new CglibInterceptor(client, serviceInterface));
         Object enhancedObject = enhancer.create();
         return (T) enhancedObject;
     }
@@ -20,7 +20,7 @@ public class CglibRpcProxy implements RpcProxy {
     /**
      * 搞个静态内部类来做Method的cglib代理
      */
-    private static class CglibInteceptor implements MethodInterceptor {
+    private static class CglibInterceptor implements MethodInterceptor {
         //首先判断所要代理的方法是通用方法，是的话就此返回此代理对象的相关内容
         private static Method hashCodeMethod;
         private static Method equalsMethod;
@@ -60,14 +60,14 @@ public class CglibRpcProxy implements RpcProxy {
         private Client client;
         private Class<?> serviceInterface;
 
-        public CglibInteceptor(Client client, Class<?> serviceInterface) {
+        public CglibInterceptor(Client client, Class<?> serviceInterface) {
             this.client = client;
             this.serviceInterface = serviceInterface;
         }
 
         @Override
         public Object intercept(Object o, Method method, Object[] args, MethodProxy proxy) {
-            //先对方法进行判断是否是通用方法，假如都不是，最后再通过client来调用
+            // 先对方法进行判断是否是通用方法，假如都不是，最后再通过client来调用
             if (hashCodeMethod.equals(method)) {
                 return proxyHashCode(proxy);
             }

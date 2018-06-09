@@ -51,6 +51,9 @@ public class ServerImpl implements Server {
 
     @Override
     public void start() {
+        if (this.started) {
+            LOGGER.info("Server Started At {}", port);
+        }
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -65,12 +68,12 @@ public class ServerImpl implements Server {
                     }
                 });
         try {
-            //调用bind等待客户端来连接
+            // 调用bind等待客户端来连接
             ChannelFuture future = serverBootstrap.bind(port).sync();
-            //接着注册服务
+            // 接着注册服务
             registerService();
             LOGGER.info("Server Started At {}", port);
-            started = true;
+            this.started = true;
             this.channel = future.channel();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -84,9 +87,11 @@ public class ServerImpl implements Server {
         CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(zkConn,
                 new ExponentialBackoffRetry(1000, 3));
         curatorFramework.start();
-        //连接上zk然后开始注册服务节点
+        this.curatorFramework = curatorFramework;
+        // 连接上zk然后开始注册服务节点
         String serviceBasePath = ZK_DATA_PATH + serviceName;
-        //添加基础服务节点
+        this.serviceRegisterPath = serviceBasePath;
+        // 添加基础服务节点
         try {
             curatorFramework.create()
                     .creatingParentContainersIfNeeded()
@@ -100,13 +105,13 @@ public class ServerImpl implements Server {
             }
         }
         boolean registerSuccess = false;
-        //如果添加成功，添加标识服务具体路径的节点
+        // 如果添加成功，添加标识服务具体路径的节点
         while (!registerSuccess) {
             try {
                 curatorFramework.create()
                         .withMode(CreateMode.EPHEMERAL)
                         .forPath(serviceBasePath + "/" + serviceIp);
-                //这里测试出现无限注册，特么坑死了，忘添加状态修改了
+                // 这里测试出现无限注册，特么坑死了，忘添加状态修改了
                 registerSuccess = true;
             } catch (Exception e) {
                 //出错重新注册(要先删除下节点再重新注册)
@@ -127,7 +132,7 @@ public class ServerImpl implements Server {
 
     @Override
     public void shutdown() {
-        //关停相关服务的逻辑
+        // 关停相关服务的逻辑
         LOGGER.info("Shutting down server {}", serviceName);
         unRegister();
         if (curatorFramework != null) {
@@ -140,7 +145,7 @@ public class ServerImpl implements Server {
     private void unRegister() {
         LOGGER.info("unRegister zookeeper");
         try {
-            curatorFramework.delete().forPath(ZK_DATA_PATH + serviceName + "/" + localIp + ":" + port);
+            curatorFramework.delete().forPath(this.serviceRegisterPath + "/" + localIp + ":" + port);
         } catch (Exception e) {
             e.printStackTrace();
         }

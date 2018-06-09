@@ -13,7 +13,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<Request> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcServerHandler.class);
     private Object service;
 
-    //此处传入service的实现类对象
+    // 此处传入service的实现类对象
     public RpcServerHandler(Object service) {
         this.service = service;
     }
@@ -23,7 +23,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<Request> {
         Object[] params = msg.getParams();
         Class<?>[] parameterTypes = msg.getParameterTypes();
         long requestId = msg.getRequestId();
-        //通过反射来获取客户端所要调用的方法并执行
+        // 通过反射来获取客户端所要调用的方法并执行
         Method method = service.getClass().getDeclaredMethod(methodName, parameterTypes);
         method.setAccessible(true);
         Object invoke = method.invoke(service, params);

@@ -41,8 +41,7 @@ public class ConnectionObjectFactory extends BasePooledObjectFactory<Channel> {
                         ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO))
                                 .addLast(new RpcDecoder(10 * 1024 * 1024))
                                 .addLast(new RpcEncoder())
-                                .addLast(new RpcClientHandler())
-                        ;
+                                .addLast(new RpcClientHandler());
                     }
                 });
         try {
@@ -70,7 +69,7 @@ public class ConnectionObjectFactory extends BasePooledObjectFactory<Channel> {
 
     @Override
     public PooledObject<Channel> wrap(Channel obj) {
-        //排查出错，之前直接返回个null，未对方法进行重写，导致出错，拿不出对象
+        // 排查出错，之前直接返回个null，未对方法进行重写，导致出错，拿不出对象
         return new DefaultPooledObject<>(obj);
     }
 

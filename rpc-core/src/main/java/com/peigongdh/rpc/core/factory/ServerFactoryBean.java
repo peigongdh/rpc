@@ -16,7 +16,7 @@ public class ServerFactoryBean implements FactoryBean<Object> {
     private String zkConn;
     private ServerImpl rpcServer;
 
-    //服务注册并提供
+    // 服务注册并提供
     public void start() {
         Server rpcServer = ServerBuilder
                 .builder()
@@ -28,7 +28,7 @@ public class ServerFactoryBean implements FactoryBean<Object> {
         rpcServer.start();
     }
 
-    //服务下线
+    // 服务下线
     public void serviceOffline() {
         rpcServer.shutdown();
     }

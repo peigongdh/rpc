@@ -42,7 +42,7 @@ public class ClientBuilder<T> {
     }
 
     public T build() {
-        //因Curator底层依赖guava，刚好可以拿来验证
+        // 因Curator底层依赖guava，刚好可以拿来验证
         Preconditions.checkNotNull(serviceInterface);
         Preconditions.checkNotNull(zkConn);
         Preconditions.checkNotNull(serviceName);

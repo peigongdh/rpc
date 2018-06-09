@@ -19,7 +19,7 @@ public class SpringServerConfig {
         final ServerFactoryBean serverFactoryBean = new ServerFactoryBean();
         serverFactoryBean.setPort(9090);
         serverFactoryBean.setServiceInterface(HelloWorld.class);
-        //此处自定义的注册名字就相当于注解了，未来迭代的时候会加入自定义注解方式
+        // 此处自定义的注册名字就相当于注解了，未来迭代的时候会加入自定义注解方式
         serverFactoryBean.setServiceName("hello");
         serverFactoryBean.setServiceImpl(hello());
         serverFactoryBean.setZkConn("127.0.0.1:2181");
@@ -34,7 +34,6 @@ public class SpringServerConfig {
     }
 
     public static void main(String[] args) {
-
         SpringApplication.run(SpringServerConfig.class, "--server.port=8082");
     }
 }
